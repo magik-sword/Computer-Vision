@@ -23,7 +23,7 @@ against eachother.
   * valid: 675 images, 0: 448 images, 1: 227
 * **Instances:**
   * Training: Entire train directory, 70% of images
-  * Testing: Test directory (not used until final evaluation), 10% of images
+  * Testing: Entire test directory (not used until final evaluation), 10% of images
   * Validation: Entire valid directory (used to evaluate models), 20% of images
 
 #### Preprocessing / Clean Up
@@ -32,18 +32,16 @@ against eachother.
 * **Image Resizing:** Images were resized from 640x640 to 224x224.
 * **Grayscale:** The images were converted from RGB to grayscale.
 * **Data Augmentation:** Random rotations, zooming in and out, and horizontal flips were applied to the training set.
-* 
+  
 #### Data Visualization
 
-As noted in the notebooks, there is a significant class imbalance in the dataset:
-* 77.8% Normal
-* 13.9% Suspect
-* 8.3% Pathological
+![image](https://github.com/user-attachments/assets/7b4d3ad5-b5b9-472c-9c0d-c0432eec0c7b)
 
-The main focus of the data visualizations is to identify features that effectively separate the minority classes from the majority class.
+Sample batch of pre-augmentation mammograms
 
-![image](https://github.com/user-attachments/assets/2e9cf5a2-52bd-410c-8e9a-2d50a3b0c0e3)
-![image](https://github.com/user-attachments/assets/36408af2-8bf7-4996-b237-ee18eb67721b)
+![image](https://github.com/user-attachments/assets/f918602e-8f1d-44d5-8a15-4fa852ef8075)
+
+Sample batch of augmented mammograms (rotated, horizontally flipped, zoomed in/out)
 
 Histogram_tendency represents the skewness of the fetal heart rate distribution during the CTG, while histogram_number_of_zeros shows the number of zero count bins in the histogram. The table shows that a left skew (-1.0) is more common in pathological cases: 27% of pathological cases have a left skew compared to less than 6% of normal or suspect cases. The graph shows that the majority of pathological class has no empty bins in their CTG histograms. 
 
@@ -65,6 +63,7 @@ Histogram_variance captures the variance of the fetal heart rate distribution du
      * batch_size = 10
      * class_weight = {0: 0.7558954748247291, 1: 1.4769613947696139}
      * optimizer = optimizers.Adam(learning_rate=0.001)
+     * kernel_regularizer=regularizers.l2(0.001))
 
 ### Training
 
@@ -97,21 +96,23 @@ After downloading the CSV file, run the EDA and Preprocessing notebook to produc
 
 ### Overview of Files in Repository
 
-* EDA and Preprocessing.ipynb: Contains data visualizations and summary info about the dataset. Produces a cleaned CSV file for training when run.
-* Training and Evaluations.ipynb: Trains and evaluates several models using the cleaned dataset from the first notebook. 
-* fetal_health.csv: The original dataset as provided by Kaggle.
+* **Baseline_Model.ipynb:** Trains a MobileNetV2 model on the unprocessed images for a baseline and saves its history.
+* **MobileNetV2_Augmented.ipynb:** Trains and saves a MobileNetV2 model/history on the augmented and preprocessed training images.
+* **EfficientNetB0_Augmented.ipynb:** Trains and saves an EfficientNetB0 model/history on the augmented and preprocessed training images.
+* **DenseNet121_Augmented.ipynb:** Trains and saves a DenseNet121_Augmented model/history on the augmented and preprocessed images.
+* **Model_Comparisons.ipynb:** Loads the previous models and histories, compares the metrics by displaying training vs validation graphs and ROC-AUC curves.
+* **Final_Evaluation.ipynb:** Loads the DenseNet121 model and runs predictions on the unseen test set. Contains a barplot, ROC-AUC curve, and final recall score.
+* **breast-cancer-detection.zip:** The original zip file from Kaggle containing all of the images used for this project. 
   
 ### Required Libraries
 
-* pandas
-* numpy
+* tensorflow
+* keras
 * matplotlib
-* ipython
-* tabulate
+* numpy
 * scikit-learn
-* xgboost
-* imbalanced-learn
-
+* pickle
+  
 #### Performance Evaluation
 
 Evaluation functions generate classification reports and confusion matrices for each model in the Training and Evaluations notebook. The table comparing the F1-scores of each model is also at the end of this notebook.
