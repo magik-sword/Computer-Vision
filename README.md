@@ -42,7 +42,7 @@ Sample batch of augmented mammograms (rotated, horizontally flipped, zoomed in/o
 
 #### Problem Formulation
   * **Input:** 224x224 grayscale images of mammogram images 
-  * **Output:** Barplot comparing the predicted vs actual labels and ROC curve
+  * **Output:** Barplot comparing the predicted vs actual labels, AUC score, and recall score
   * **Models:**
     * MobileNetV2 (Baseline) 
     * MobilNetV2 (Augmented)
