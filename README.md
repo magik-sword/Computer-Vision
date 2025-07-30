@@ -2,10 +2,10 @@
 
 # Mammogram Tumor Classification
 
-This repository contains files that attempt to develop a convolutional neural network (CNN) model that can accurately classify breast tumors on a mammogram in the ["Breast Cancer"](https://www.kaggle.com/datasets/hayder17/breast-cancer-detection/data) Kaggle dataset is malignant or benign.
+This repository contains files attempting to develop a convolutional neural network (CNN) model that can accurately classify breast tumors on a mammogram in the ["Breast Cancer"](https://www.kaggle.com/datasets/hayder17/breast-cancer-detection/data) Kaggle dataset is malignant or benign.
 
 ## Overview
-Breast cancer is one of the most commonly diagnosed cancers across the world and the most commonly diagnosed among women. Mammograms are a standard way of detecting early signs of breast cancer, but factors such as breast tissue density, machine artifacts, and human error often lead to malignant tumors going unseen. This project aims to minimize the amount of malignant tumors that go undiagnosed by training three different transfer models on the dataset and comparing their performances against each other. The final model was a pre-trained DenseNet121 model that achieved a AUC score of 0.58 and a recall of 0.54.
+Breast cancer is one of the most commonly diagnosed cancers worldwide and the most commonly diagnosed among women. Mammograms are a standard way of detecting early signs of breast cancer, but factors such as breast tissue density, machine artifacts, and human error often lead to malignant tumors going unseen. This project aims to minimize the amount of malignant tumors that go undiagnosed by training three different transfer models on the dataset and comparing their performance. The final model was a pre-trained DenseNet121 model that achieved an AUC score of 0.58 and a recall of 0.54.
 
 ## Summary of Work Done
 
@@ -60,13 +60,13 @@ Sample batch of augmented mammograms (rotated, horizontally flipped, zoomed in/o
     
 ### Training
 
-After the initial baseline model is trained and created, all datasets were normalized, resized, and converted to grayscale. Data augmentation was applied only to the training set. Several safeguards were implemented to prevent overfitting in the augmented models: EarlyStopping, dropout layers, L2 Regularization, and class weights. Unfortunately, overfitting still occurred to some extent in all of the models. The models were compared using training vs validation recall/loss graphs and ROC-AUC curves. 
+After training the initial baseline model, all datasets were normalized, resized, and converted to grayscale. Data augmentation was applied only to the training set. Several safeguards were implemented to prevent overfitting in the augmented models: Earlystopping, dropout layers, L2 regularization, and class weights. Unfortunately, overfitting still occurred to some extent in all of the models. The models were evaluated using training vs validation recall/loss graphs and ROC-AUC curves. 
 
 ### Performance Comparison
 
 ![image](https://github.com/user-attachments/assets/ec8b755b-695a-4132-a80c-ffb8a7938aca)
 
-Highly unstable and performs poorly. Expected given this is just a baseline.
+The baseline model performed poorly and showed high instability, as expected.
 
 ![image](https://github.com/user-attachments/assets/006b767b-da15-43b3-a9e6-42613b3d569d)
 
@@ -78,7 +78,7 @@ This model exhibited significant overfitting. The reason behind the sudden spike
 
 ![image](https://github.com/user-attachments/assets/c0923393-4972-4a00-b7cb-d7bb08b448d2)
 
-Although it stopped early due to overfitting, the DenseNet121 model seemed to generalize the best. The validation recall was higher than the rest even if it was moderately unstable, and had a decreasing validation loss for the most part. 
+Although it stopped early due to overfitting, the DenseNet121 model seemed to generalize the best. The validation recall was higher than the rest despite the moderate instability, and had a decreasing validation loss for the most part. 
 
 ![image](https://github.com/user-attachments/assets/cc704ecc-1b35-42a0-9e42-456a2e8d5e55)
 
@@ -90,18 +90,17 @@ As shown above, even the best performing models still struggled to generalize, o
 
 ![image](https://github.com/user-attachments/assets/ca0f3955-31ba-4efd-8924-d2a265a756da)
 
-The evaluations above are based on the performance of DenseNet121 on the final test set. The model actually overpredicts the amount of malignant cases, leading to it missing a moderate amount of benign ones. This likely explains the slightly lower AUC score on the test set compared to the validation set. If this overfitting problem can be overcome, the DenseNet121 model could likely perform well on this dataset with further tuning.
+The evaluations above are based on the performance of DenseNet121 on the final test set. The model tended to overpredict the number of malignant cases, leading to missed benign cases. This likely explains the slightly lower AUC score on the test set compared to the validation set. If this overfitting problem can be overcome, the DenseNet121 model could likely perform well on this dataset with further tuning.
 
 ### Conclusions
 
-Although transfer models such as DenseNet121 can perform well, additional care must be taken when working with small and imbalanced datasets. A more effective strategy for addressing this problem likely lies in segmentation or cropping the images. 
-
+Although transfer models such as DenseNet121 can perform well, additional care must be taken when working with small and imbalanced datasets. A more effective strategy may involve image segmentation or cropping to isolate relevant features.
 ### Future Work
 
-TThe primary challenge in this project was the class imbalance. Most of my time training was spent trying different ways to combat overfitting due to this imbalance. Most of the suggestions below are related to this problem I kept running into.
+The primary challenge in this project was the class imbalance. Most of my time training was spent trying different ways to combat overfitting due to this imbalance. Most of the suggestions below are related to this problem I kept running into.
 
 * **Heavier Models:** Due to being limited to my laptop for this project, I was limited to keeping the augmentations and transfer models relatively light to keep training time manageable and prevent system crashes. More complex models such as VGG16/19 or ResNet152 likely could give better results.
-* **Segmentation:** A significant portion of each image is blank space that provides no valuable information to the models. Isolating the breast tissue through edge detection likely will produce greater results than this project. 
+* **Segmentation:** A significant portion of each image is blank space that provides no valuable information to the models. Isolating the breast tissue through edge detection may  produce better results than those achieved here. 
 * **Creating New Images:** Another idea to explore is adding new images to the minority class. This could be achieved by duplicating existing malignant tumor images and applying minor augmentations to ensure variation.
 * **Fine-Tuning:** Different combinations of optimizers, loss functions, and hyperparameters can and should be explored in the future to see if these can affect performance on the models tested here. 
   
@@ -109,7 +108,7 @@ TThe primary challenge in this project was the class imbalance. Most of my time 
 
 * Download and unzip the zip file to access the image directories. All of the notebooks assume the files are unzipped and in the same directory as them.
 * Run the Baseline_Model notebook
-* The next three notebooks can be run in any order, they serve as a way to control file size and experiment with different augmentations/preprocessing. The function that creates these models and the preprocessing pipeline can easily be edited to try out different models or strategies.
+* The next three notebooks can be run in any order. They serve as a way to control file size and experiment with different augmentations/preprocessing. The function that creates these models and the preprocessing pipeline can easily be edited to try out different models or strategies.
     *   MobileNetV2_Augmented.ipynb
     *   EfficientNetB0_Augmented.ipynb
     *   DenseNet121_Augmented.ipynb
